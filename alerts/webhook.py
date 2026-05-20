@@ -102,6 +102,13 @@ def send_settlement_alert(
         except Exception as e:
             logger.error(f"Webhook POST failed to {url[:50]}...: {e}")
 
+    # Post to Twitter/X
+    try:
+        from alerts.twitter import post_settlement_tweet
+        post_settlement_tweet(settlement)
+    except Exception as e:
+        logger.error(f"Twitter post failed: {e}")
+
 
 def send_digest(settlements: list[dict], webhook_urls: Optional[list[str]] = None):
     """Send a digest of multiple settlements as a single message."""
